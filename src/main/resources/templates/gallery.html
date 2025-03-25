@@ -1,121 +1,327 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarVue Gallery</title>
-    <link rel="stylesheet" href="/static/styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>CarVue</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --background-dark: #0a0a0a;
+            --background-accent: #1c1c1c;
+            --accent-color: #ff1a1a;
+            --card-shadow: 0 8px 16px rgba(255, 26, 26, 0.15);
+            --text-color: #e0e0e0;
+            --glow-color: rgba(255, 26, 26, 0.1);
+            --hover-scale: 1.03;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            text-align: center;
-        }
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-        }
-        .image-card {
+            background: var(--background-dark);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: var(--text-color);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
             position: relative;
-            width: 250px;
-            height: 180px;
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out;
-            border: 2px solid red;
+            overflow-x: hidden;
+            background-image: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+            background-attachment: fixed;
         }
-        .image-card:hover {
-            transform: scale(1.1);
-        }
-        .image-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .overlay {
-            position: absolute;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            width: 100%;
-            text-align: center;
-            padding: 10px;
-            transform: translateY(100%);
-            transition: transform 0.3s ease-in-out;
-        }
-        .image-card:hover .overlay {
-            transform: translateY(0);
-        }
-        .modal {
-            display: none;
+
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: radial-gradient(circle at 50% 30%, var(--glow-color) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 4.5rem;
+            margin-bottom: 40px;
+            font-family: 'Racing Sans One', cursive;
+            color: var(--accent-color);
+            text-shadow: 0 0 15px rgba(255, 26, 26, 0.5);
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .upload-link {
             display: flex;
+            justify-content: center;
+            margin-block: 3rem;
+        }
+
+        .upload-link a {
+            text-decoration: none;
+            text-align: center;
+            color: var(--text-color);
+            background: linear-gradient(45deg, #cc0000, var(--accent-color));
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 12px rgba(255, 26, 26, 0.3);
+        }
+
+        .upload-link a:hover {
+            transform: scale(var(--hover-scale));
+            box-shadow: 0 6px 20px rgba(255, 26, 26, 0.5);
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .image-item {
+            position: relative;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 26, 26, 0.3);
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, border 0.3s;
+            overflow: hidden;
+        }
+
+        .image-item:hover {
+            transform: scale(var(--hover-scale));
+            border: 1px solid var(--accent-color);
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .image-description {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: var(--text-color);
+            padding: 5px;
+            font-size: 0.9rem;
+            font-family: 'Roboto', sans-serif;
+            text-align: left;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+            transition: font-size 0.3s, transform 0.3s;
+            max-width: 80%;
+            pointer-events: none;
+        }
+
+        .image-item:hover .image-description {
+            font-size: 1.1rem;
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
             justify-content: center;
             align-items: center;
         }
+
         .modal-content {
-            background: black;
-            border-radius: 10px;
-            padding: 20px;
-            width: 60%;
+            background: rgba(20, 20, 20, 0.9);
+            padding: 25px;
+            border-radius: 12px;
+            position: relative;
             text-align: center;
-            box-shadow: 0 0 10px red;
+            border: 1px solid var(--accent-color);
+            box-shadow: 0 0 20px rgba(255, 26, 26, 0.2);
         }
+
         .modal-content img {
-            max-width: 100%;
-            border-radius: 10px;
+            width: 90%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 26, 26, 0.3);
         }
-        .close {
+
+        .modal-description {
+            color: var(--text-color);
+            margin-top: 15px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+        }
+
+        .close-btn {
             position: absolute;
-            top: 20px;
+            top: 15px;
             right: 20px;
-            font-size: 30px;
+            font-size: 35px;
             cursor: pointer;
-            color: red;
+            color: var(--accent-color);
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #cc0000;
+        }
+
+        .delete-btn {
+            display: none;
+            background: linear-gradient(45deg, #cc0000, var(--accent-color));
+            color: var(--text-color);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s, transform 0.3s;
+            box-shadow: 0 4px 12px rgba(255, 26, 26, 0.3);
+        }
+
+        .delete-btn:hover {
+            background: linear-gradient(45deg, #b30000, #cc0000);
+            transform: scale(1.05);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .pagination-container {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 26, 26, 0.3);
+        }
+
+        .pagination a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: bold;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .pagination a:hover {
+            background: rgba(255, 26, 26, 0.3);
+            color: var(--accent-color);
+        }
+
+        .pagination a.active {
+            background: var(--accent-color);
+            color: var(--text-color);
         }
     </style>
 </head>
+
 <body>
-<div class="gallery">
-    <div th:each="car : ${cars}" class="image-card" onclick="openModal(this)"
-         th:data-url="${car.imageUrl}" th:data-name="${car.name}" th:data-description="${car.description}">
-        <img th:src="${car.imageUrl}" alt="Car Image">
-        <div class="overlay">
-            <h3 th:text="${car.name}"></h3>
-            <p th:text="${car.description}"></p>
-        </div>
+<h1>CarVue Gallery</h1>
+
+<!-- Upload Button -->
+<div class="upload-link">
+    <a href="/upload">Upload New Beast</a>
+</div>
+
+<!-- Image Grid -->
+<div class="image-grid">
+    <div th:each="image : ${images}" class="image-item" onclick="openModal(this)">
+        <img th:src="${image.key}" alt="Car Image" />
+        <div class="image-description" th:text="${image.value}"></div>
     </div>
 </div>
 
+<!-- Pagination -->
+<div class="pagination" th:if="${totalPages > 1}">
+    <div class="pagination-container">
+        <span class="pagination-button" th:if="${currentPage > 0}">
+            <a th:href="@{/(page=${currentPage - 1}, size=${pageSize})}">Previous</a>
+        </span>
+        <span class="pagination-page" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="@{/(page=${i}, size=${pageSize})}"
+               th:text="${i + 1}"
+               th:class="${currentPage == i} ? 'active' : ''"></a>
+        </span>
+        <span class="pagination-number" th:if="${hasNextPage}">
+            <a th:href="@{/(page=${currentPage + 1}, size=${pageSize})}">Next</a>
+        </span>
+    </div>
+</div>
+
+<!-- Modal for Image Preview -->
 <div id="imageModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img id="modalImage" src="" alt="Selected Car">
-        <h2 id="modalTitle"></h2>
-        <p id="modalDescription"></p>
+        <span class="close-btn" onclick="closeModal()">×</span>
+        <img id="modalImage" src="" alt="Preview" />
+        <div class="modal-description" id="modalDescription"></div>
+        <form id="deleteForm" th:action="@{/delete}" method="post">
+            <input type="hidden" name="imageKey" id="selectedImageKey" />
+            <button type="submit" id="deleteBtn" class="delete-btn">Delete</button>
+        </form>
     </div>
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        closeModal();
+    });
+
     function openModal(element) {
-        document.getElementById("modalImage").src = element.getAttribute("data-url");
-        document.getElementById("modalTitle").innerText = element.getAttribute("data-name");
-        document.getElementById("modalDescription").innerText = element.getAttribute("data-description");
-        document.getElementById("imageModal").style.display = "block";
+        const imageUrl = element.querySelector("img").src;
+        const description = element.querySelector(".image-description").textContent;
+        document.getElementById("modalImage").src = imageUrl;
+        document.getElementById("modalDescription").textContent = description;
+
+        const imageKey = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+        document.getElementById("selectedImageKey").value = imageKey;
+
+        document.getElementById("imageModal").style.display = "flex";
+        document.getElementById("deleteBtn").style.display = "block";
     }
+
     function closeModal() {
         document.getElementById("imageModal").style.display = "none";
+        document.getElementById("deleteBtn").style.display = "none";
+        document.getElementById("modalDescription").textContent = "";
+
+        let selectedInput = document.getElementById("selectedImageKey");
+        if (selectedInput) {
+            selectedInput.value = "";
+        }
     }
 </script>
 </body>

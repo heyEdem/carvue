@@ -10,8 +10,8 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 @Configuration
 public class Config {
-//    @Value("${spring.cloud.aws.region.static:us-east-1}")
-    private String awsRegion = "us-east-1";
+    @Value("us-east-1")
+    private String awsRegion;
 
 
     @Bean
