@@ -115,6 +115,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>carvue</finalName>
     </build>
 
 </project>
