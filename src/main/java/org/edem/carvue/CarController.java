@@ -53,9 +53,6 @@ public class CarController {
             } else if (response.equals("empty")) {
                 redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
                 return "redirect:/upload";
-            } else if (response.equals("max")) {
-                redirectAttributes.addFlashAttribute("message", "Upload file. Max number of images is 5");
-                return "redirect:/upload";
             }
 
         } catch (Exception e) {
