@@ -22,7 +22,7 @@ jobs:
 
     - name: Build, tag, and push image to Amazon ECR
       env:
-        ECR_REGISTRY: public.ecr.aws/r1b3l1w9/carvue
+        ECR_REGISTRY: public.ecr.aws/r1b3l1w9
         ECR_REPOSITORY: carvue
         IMAGE_TAG: carvue_image
       run: |
