@@ -19,7 +19,7 @@ jobs:
     - name: Build with Maven
       env:
         SPRING_PROFILES_ACTIVE: test
-        run: mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml
         
     - name: Login to Amazon ECR Public
       run: |
