@@ -22,7 +22,7 @@ public class CarService {
     private final   S3Client s3Client;
     private final S3Presigner s3Presigner;
 
-    private String BUCKET_NAME = "imagery-app";
+    private String BUCKET_NAME = "carvue-bucket";
 
 
 
