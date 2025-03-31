@@ -89,10 +89,13 @@
 
         .image-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 columns, no minimum stretching */
             gap: 20px;
-            max-width: 1400px;
+            max-width: 1200px; /* Adjust to fit 4 items comfortably */
+            width: 100%; /* Ensure it respects container width */
             margin: 0 auto;
+            padding: 0 10px; /* Optional padding */
+            box-sizing: border-box;
         }
 
         .image-item {
@@ -105,11 +108,8 @@
             cursor: pointer;
             transition: transform 0.3s, border 0.3s;
             overflow: hidden;
-        }
-
-        .image-item:hover {
-            transform: scale(var(--hover-scale));
-            border: 1px solid var(--accent-color);
+            width: 100%; /* Fill grid cell */
+            box-sizing: border-box;
         }
 
         .image-item img {
@@ -117,8 +117,14 @@
             height: 220px;
             object-fit: cover;
             border-radius: 8px 8px 0 0;
+            display: block; /* Remove any inline spacing */
         }
 
+
+        .image-item:hover {
+            transform: scale(var(--hover-scale));
+            border: 1px solid var(--accent-color);
+        }
         .image-description {
             position: absolute;
             bottom: 10px;
